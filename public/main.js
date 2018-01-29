@@ -1,37 +1,36 @@
 
-let twitchApiUrl = "https://wind-bow.gomix.me/twitch-api/";
-
-const dataDiv = document.getElementById("dataDiv");
+let twitchApiUrl = 'https://wind-bow.gomix.me/twitch-api/'
 
 let twitchStreamers = [
-    "dreamhackcs",
-    "skyzhar",
-    "freecodecamp",
-    "faceittv",
-    "terakilobyte",
-    "robotcaleb",
-    "sheevergaming",
-    "esl_sc2",
-    "ogamingsc2",
-    "jacksofamerica"
-];
+  'Streamerhouse',
+  'Monstercat',
+  'freeCodeCamp'
+]
 
-let twitchStreamerIds = [];
+let twitchStreamersStatus = {}
 
-function getUserIds() {
-    twitchStreamers.forEach((currentStreamer) => {
-        fetchJsonp(twitchApiUrl + "users/" + currentStreamer)
-            .then(response => response.json())
-            .then(data => twitchStreamerIds.push(data._id))
+let streamData = []
+
+twitchStreamers.forEach((streamer) => {
+  fetchJsonp(twitchApiUrl + 'streams/' + streamer)
+    .then((response) => response.json())
+    .then((data) => {
+      streamData.push(data)
+      return streamData
     })
-    return twitchStreamerIds;
-}
-getUserIds();
+    .then((streamData) => {
+      checkStreamStatus(streamData)
+    })
+})
 
-//Task: use userId to get stream data || Status: currently unfinsihed
-function getStreamData() {
-    for (var currentId in twitchStreamerIds) {
-        console.log(currentId);
+function checkStreamStatus (data) {
+  let i = 0
+  for (i in data) {
+    if (data[i].stream == null) {
+      twitchStreamersStatus[twitchStreamers[i]] = 'offline'
+    } else {
+      twitchStreamersStatus[twitchStreamers[i]] = 'online'
     }
+  }
+  console.log(twitchStreamersStatus)
 }
-

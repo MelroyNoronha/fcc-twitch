@@ -1,25 +1,30 @@
 
 let twitchApiUrl = 'https://wind-bow.gomix.me/twitch-api/'
-
 let twitchStreamers = [
   'Streamerhouse',
   'Monstercat',
   'freeCodeCamp',
   'Doublelift',
-  'funfunfunction'
+  'funfunfunction',
+  'playBATTLEGROUNDS',
+  'loltyler1'
 ]
+let twitchStreamersStatus = {}
+let rawData =
+  twitchStreamers.map((streamer) => {
+    let fetchedData = fetchJsonp(twitchApiUrl + 'streams/' + streamer)
+      .then(response => response.json())
+      .then(data => data)
+    return fetchedData
+  })
 
-twitchStreamers.forEach((streamer) => {
-  fetchJsonp(twitchApiUrl + 'streams/' + streamer)
-    .then((response) => response.json())
-    .then((data) => {
-      let twitchStreamersStatus = {}
-      if (data.stream == null) {
-        twitchStreamersStatus[streamer] = 'offline'
-      } else {
-        twitchStreamersStatus[streamer] = 'online'
-      }
-      return twitchStreamersStatus
-    })
-    .then(twitchStreamersStatus => console.log(twitchStreamersStatus))
+Promise.all(rawData).then((rawData) => {
+  rawData.forEach((item, index) => {
+    if (item.stream == null) {
+      twitchStreamersStatus[twitchStreamers[index]] = 'not streaming'
+    } else {
+      twitchStreamersStatus[twitchStreamers[index]] = 'streaming'
+    }
+  })
+  console.log(twitchStreamersStatus)
 })

@@ -7,9 +7,10 @@ let twitchStreamers = [
   'Doublelift',
   'funfunfunction',
   'playBATTLEGROUNDS',
-  'loltyler1'
+  'loltyler1',
+  'Gosu'
 ]
-let twitchStreamersStatus = {}
+let requiredData = []
 let rawData =
   twitchStreamers.map((streamer) => {
     let fetchedData = fetchJsonp(twitchApiUrl + 'streams/' + streamer)
@@ -21,10 +22,21 @@ let rawData =
 Promise.all(rawData).then((rawData) => {
   rawData.forEach((item, index) => {
     if (item.stream == null) {
-      twitchStreamersStatus[twitchStreamers[index]] = 'not streaming'
+      requiredData.push({ name: twitchStreamers[index], status: 'not streaming' })
     } else {
-      twitchStreamersStatus[twitchStreamers[index]] = 'streaming'
+      requiredData.push({ name: twitchStreamers[index], status: 'streaming', link: item.stream.channel.url })
     }
   })
-  console.log(twitchStreamersStatus)
+  console.log(showStreaming(requiredData))
+  console.log(showNotStreaming(requiredData))
 })
+
+function showStreaming (data) {
+  let streaming = data.filter(item => item.status === 'streaming')
+  return streaming
+}
+
+function showNotStreaming (data) {
+  let notStreaming = data.filter(item => item.status === 'not streaming')
+  return notStreaming
+}

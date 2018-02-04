@@ -1,3 +1,65 @@
+@import url('https://fonts.googleapis.com/css?family=Lato');
+
+:root{
+    --twitch-purple: #6441A4;
+    --default-white: #ffffff;
+    --online-green: #00E676;
+    --offline-red: #FF5252;
+    --default-font: 'Lato', sans-serif;
+    font-size: 62.5%;   
+}
+
 body{
     margin: 0px;
+    padding: 0px;
+    background-color: var(--twitch-purple)
+}
+
+#displayDiv{
+    display: grid;
+    position: absolute;
+    width: 80%;
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+}
+
+.listItem{
+    font-family: var(--default-font);
+    font-size: 2.1rem;
+    background-color: var(--default-white);
+    padding: 10%;
+    margin-bottom: 3%;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.streaming{
+    border-left: solid 5px var(--online-green)
+}
+
+.not-streaming{
+    border-left: solid 5px var(--offline-red)
+}
+
+.watchBtn{
+    all: unset;
+    position: relative;
+    top: 12%;
+    left: 0%;
+    background-color: var(--twitch-purple);
+    padding: 2.5%;
+    font-family: var(--default-font);
+    font-size: 1.5rem;
+    color: var(--default-white);
+    cursor: pointer;
+}
+
+@media screen and (min-width: 800px) {
+    .listItem{
+        font-size: 3rem;
+        padding: 5%;
+    }
+    .watchBtn{
+        padding: 1.5%;
+    }
 }

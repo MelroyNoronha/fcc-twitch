@@ -1,0 +1,11 @@
+{
+    "short_name": "twitch",
+    "name": "twitch stream notifier",
+    "icons": [
+        {
+            "src": "twitch.png"
+        }
+    ],
+    "start_url": "index.html?addToHome=true",
+    "display": "standalone"
+}

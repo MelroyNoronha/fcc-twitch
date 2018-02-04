@@ -1,9 +1,11 @@
 
+const displayDiv = document.getElementById('displayDiv')
+
 let twitchApiUrl = 'https://wind-bow.gomix.me/twitch-api/'
 let twitchStreamers = [
+  'freeCodeCamp',
   'Streamerhouse',
   'Monstercat',
-  'freeCodeCamp',
   'Doublelift',
   'funfunfunction',
   'playBATTLEGROUNDS',
@@ -13,13 +15,14 @@ let twitchStreamers = [
 let requiredData = []
 let rawData =
   twitchStreamers.map((streamer) => {
-    let fetchedData = fetchJsonp(twitchApiUrl + 'streams/' + streamer)
+    let fetchedData = fetchJsonp(twitchApiUrl + 'streams/' + streamer) // used fetchJsonp to make get cross origin data
       .then(response => response.json())
       .then(data => data)
     return fetchedData
   })
 
 Promise.all(rawData).then((rawData) => {
+  console.log(rawData)// delete later
   rawData.forEach((item, index) => {
     if (item.stream == null) {
       requiredData.push({ name: twitchStreamers[index], status: 'not streaming' })
@@ -27,16 +30,20 @@ Promise.all(rawData).then((rawData) => {
       requiredData.push({ name: twitchStreamers[index], status: 'streaming', link: item.stream.channel.url })
     }
   })
-  console.log(showStreaming(requiredData))
-  console.log(showNotStreaming(requiredData))
+
+  displayDiv.innerHTML = ``
+  requiredData.forEach((item) => {
+    if (item.status === 'streaming') {
+      displayDiv.innerHTML +=
+        `<div class='listItem streaming'>
+          ${item.name} <br>
+          <a href="${item.link}" target="_blank" class="watchBtn">Watch stream</a>
+        </div>`
+    } else {
+      displayDiv.innerHTML +=
+        `<div class='listItem not-streaming'>
+          ${item.name} <br> ${item.status}
+        </div>`
+    }
+  })
 })
-
-function showStreaming (data) {
-  let streaming = data.filter(item => item.status === 'streaming')
-  return streaming
-}
-
-function showNotStreaming (data) {
-  let notStreaming = data.filter(item => item.status === 'not streaming')
-  return notStreaming
-}
